@@ -2,10 +2,10 @@ fastapi
 uvicorn
 python-multipart
 python-dotenv
-langchain
-langchain-community
+langchain>=0.1.0
+langchain-community>=0.0.10
 langchain-groq
-# langchain-huggingface often contains sentence-transformers but let's be explicit
+langchain-core>=0.1.10
 sentence-transformers
 chromadb
 pypdf
@@ -13,5 +13,4 @@ duckduckgo-search
 fpdf
 httpx
 requests
-# Core dependencies for Langchain
-langchain-core
+pydantic>=2.0
