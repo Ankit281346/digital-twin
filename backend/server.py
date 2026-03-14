@@ -21,7 +21,7 @@ app = FastAPI(title="Digital Twin API", version="1.0.0")
 # Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specific domains only
+    allow_origins=["https://digital-twin-ankit.vercel.app", "http://localhost:3000"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
