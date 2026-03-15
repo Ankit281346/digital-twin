@@ -23,7 +23,7 @@ app.add_middleware(
     CORSMiddleware,
     # Allow all origins for now to prevent any CORS issues during deployment
     allow_origins=["*"], 
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

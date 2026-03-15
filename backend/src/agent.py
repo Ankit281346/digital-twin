@@ -3,7 +3,12 @@ from dotenv import load_dotenv
 
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_groq import ChatGroq
-from duckduckgo_search import DDGS
+
+try:
+    from duckduckgo_search import DDGS
+except ImportError:
+    DDGS = None
+
 from langchain_core.prompts import PromptTemplate
 from langchain_core.tools import tool
 
@@ -31,15 +36,24 @@ def calculator(expression: str) -> str:
 @tool
 def web_search(query: str) -> str:
     """Useful for when you need to answer current events or general questions about the world."""
+    if DDGS is None:
+        return "Search functionality is currently unavailable (library missing)."
+    
     try:
         # Use direct library call for reliability
         with DDGS() as ddgs:
             # Try HTML backend first (often bypasses rate limits)
-            results = [r for r in ddgs.text(query, max_results=5, backend="html")]
+            try:
+                results = [r for r in ddgs.text(query, max_results=5, backend="html")]
+            except Exception:
+                results = []
             
             # Fallback to default backend (api) if HTML returns nothing
             if not results:
-                results = [r for r in ddgs.text(query, max_results=5, backend="api")]
+                try:
+                    results = [r for r in ddgs.text(query, max_results=5, backend="api")]
+                except Exception:
+                    pass
 
             if results:
                 return "\n\n".join([f"Title: {r['title']}\nLink: {r['href']}\nSnippet: {r['body']}" for r in results])
