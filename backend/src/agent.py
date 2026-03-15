@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_groq import ChatGroq
 from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_core.prompts import PromptTemplate
 from langchain_core.tools import tool
 
@@ -31,8 +32,13 @@ def calculator(expression: str) -> str:
 @tool
 def web_search(query: str) -> str:
     """Useful for when you need to answer current events or general questions about the world."""
-    search = DuckDuckGoSearchRun()
-    return search.invoke(query)
+    try:
+        # Using 'html' backend often bypasses strict rate limits on the API
+        wrapper = DuckDuckGoSearchAPIWrapper(backend="html")
+        search = DuckDuckGoSearchRun(api_wrapper=wrapper)
+        return search.invoke(query)
+    except Exception as e:
+        return f"Search failed due to rate limits or network issues: {str(e)}"
 
 def get_agent():
     api_key = config.GROQ_API_KEY

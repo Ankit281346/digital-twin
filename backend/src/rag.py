@@ -2,7 +2,7 @@ import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.tools.retriever import create_retriever_tool
 
 def initialize_rag():
