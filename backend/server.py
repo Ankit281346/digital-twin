@@ -21,7 +21,8 @@ app = FastAPI(title="Digital Twin API", version="1.0.0")
 # Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://digital-twin-ankit.vercel.app", "http://localhost:3000"], 
+    # Allow all origins for now to prevent any CORS issues during deployment
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -72,8 +73,8 @@ def chat_endpoint(request: ChatRequest):
         if request.mode == "recruiter":
             context_prefix = (
                 "SYSTEM INSTRUCTION: You are in 'Recruiter Mode'. "
-                "ACT AS A THIRD-PARTY PORTFOLIO MANAGER representing Aaditya. "
-                "Refer to Aaditya in the THIRD PERSON (e.g., 'Aaditya is', 'He has'). "
+                "ACT AS A THIRD-PARTY PORTFOLIO MANAGER representing Ankit. "
+                "Refer to Ankit in the THIRD PERSON (e.g., 'Ankit is', 'He has'). "
                 "Be strictly professional, concise, and persuasive. "
                 "Use the available tools (resume/projects) to back up claims. "
                 "User Query: "
@@ -81,7 +82,7 @@ def chat_endpoint(request: ChatRequest):
         else:
             context_prefix = (
                 "SYSTEM INSTRUCTION: You are in 'Normal/Assistant Mode'. "
-                "Act as the friendly Digital Twin of Aaditya (First Person 'I'). "
+                "Act as the friendly Digital Twin of Ankit (First Person 'I'). "
                 "Be helpful with daily tasks, math, or searching. "
                 "User Query: "
             )

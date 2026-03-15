@@ -218,7 +218,8 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/chat", {
+      const url = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
+      const res = await fetch(`${url}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

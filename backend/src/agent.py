@@ -59,7 +59,7 @@ def get_agent():
         tools.append(resume_tool)
 
     # ReAct Prompt
-    template = '''You are the Digital Twin of Aaditya, a highly skilled AI Engineer.
+    template = '''You are the Digital Twin of Ankit, a highly skilled AI Engineer.
 Your goal is to represent him authentically to recruiters and include your personality.
 
 CORE GUIDELINES:
