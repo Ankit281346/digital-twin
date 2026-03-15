@@ -128,5 +128,7 @@ Thought:{agent_scratchpad}'''
         agent=agent, 
         tools=tools, 
         verbose=config.DEBUG_MODE, 
-        handle_parsing_errors=True
+        handle_parsing_errors=True,
+        max_iterations=5,
+        max_execution_time=25,  # Hard stop at 25s so Render's 30s limit isn't hit
     )

@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Response
 from fastapi.responses import StreamingResponse
+from contextlib import asynccontextmanager
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -16,7 +17,24 @@ from src.agent import get_agent
 from src.config import config
 from langchain_core.messages import HumanMessage, AIMessage
 
-app = FastAPI(title="Digital Twin API", version="1.0.0")
+# Global Agent Instance
+agent_executor = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize the agent at startup so the first request isn't slow."""
+    global agent_executor
+    print("Starting up: initializing agent...")
+    try:
+        agent_executor = get_agent()
+        print("Agent initialized successfully.")
+    except Exception as e:
+        print(f"Warning: Agent initialization failed: {e}")
+        agent_executor = None
+    yield
+    print("Shutting down.")
+
+app = FastAPI(title="Digital Twin API", version="1.0.0", lifespan=lifespan)
 
 # Enable CORS for frontend
 app.add_middleware(
@@ -42,12 +60,10 @@ class GenerateRequest(BaseModel):
     company_name: str
     job_role: str
 
-# Global Agent Instance (Lazy loaded)
-agent_executor = None
-
 def get_agent_instance():
     global agent_executor
     if agent_executor is None:
+        print("Agent not initialized at startup, initializing now...")
         agent_executor = get_agent()
     return agent_executor
 

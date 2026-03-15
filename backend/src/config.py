@@ -10,7 +10,7 @@ class Config:
     # - llama-3.1-8b-instant (Fastest, lower limits)
     # - mixtral-8x7b-32768
     # - qwen/qwen3-32b (Balanced)
-    LLM_MODEL = os.getenv("LLM_MODEL", "qwen/qwen3-32b")
+    LLM_MODEL = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
     LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.7"))
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
