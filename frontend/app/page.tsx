@@ -540,7 +540,7 @@ export default function Home() {
 
       {/* Bottom Input Area (Only visible in Chat Mode) */}
       {hasStarted && (
-         <div className="w-full bg-[#FDFBF8] sticky bottom-0 pb-6 pkg-4">
+         <div className="w-full bg-[#FDFBF8] sticky bottom-0 pb-6 px-4">
             <div className="max-w-3xl mx-auto px-4">
                <div className="w-full bg-white rounded-2xl shadow-sm border border-[#E5E3DF] p-3 group focus-within:ring-1 focus-within:ring-[#D97757]/30 transition-shadow hover:shadow-md flex items-center gap-3">
                   <button type="button" className="text-[#5D5D5D] hover:bg-[#F3F1ED] p-2 rounded-full transition-colors">
@@ -565,10 +565,15 @@ export default function Home() {
                     >
                          <Mic size={18} />
                     </button>
-                  </form>
-                  <button type="submit" disabled={!input.trim() || loading} className="text-[#D97757] hover:bg-[#F3F1ED] p-2 rounded-lg transition-colors disabled:opacity-50">
-                      <Send size={18} />
-                  </button>
+                     <button 
+                        type="button"
+                        onClick={() => handleSubmit()}
+                        disabled={!input.trim() || loading} 
+                        className="text-[#D97757] hover:bg-[#F3F1ED] p-2 rounded-lg transition-colors disabled:opacity-50"
+                     >
+                        <Send size={18} />
+                     </button>
+                   </form>
                </div>
                <div className="mt-2 text-center text-xs text-[#9CA3AF]">
                   Digital Twin can make mistakes. Please double check responses.

@@ -40,23 +40,26 @@ def web_search(query: str) -> str:
         return "Search functionality is currently unavailable (library missing)."
     
     try:
-        # Use direct library call for reliability
         with DDGS() as ddgs:
-            # Try HTML backend first (often bypasses rate limits)
             try:
-                results = [r for r in ddgs.text(query, max_results=5, backend="html")]
+                results = [r for r in ddgs.text(query, max_results=3, backend="html")]
             except Exception:
                 results = []
             
-            # Fallback to default backend (api) if HTML returns nothing
             if not results:
                 try:
-                    results = [r for r in ddgs.text(query, max_results=5, backend="api")]
+                    results = [r for r in ddgs.text(query, max_results=3, backend="api")]
                 except Exception:
                     pass
 
             if results:
-                return "\n\n".join([f"Title: {r['title']}\nLink: {r['href']}\nSnippet: {r['body']}" for r in results])
+                # Truncate each snippet to avoid blowing Groq's token/minute rate limit
+                formatted = "\n\n".join([
+                    f"Title: {r['title']}\nLink: {r['href']}\nSnippet: {r['body'][:300]}"
+                    for r in results
+                ])
+                # Hard cap on total search output to stay within token budget
+                return formatted[:1500]
             return "No results found."
     except Exception as e:
         return f"Search failed: {str(e)}"
@@ -130,5 +133,5 @@ Thought:{agent_scratchpad}'''
         verbose=config.DEBUG_MODE, 
         handle_parsing_errors=True,
         max_iterations=5,
-        max_execution_time=25,  # Hard stop at 25s so Render's 30s limit isn't hit
+        max_execution_time=28,  # Stay under Render's 30s connection limit
     )
